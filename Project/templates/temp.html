@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Object Detection from Webcam</title>
+  <style>
+.webcam-box.custom-hover {
+    background-color: #111;           /* Black background */
+    color: #fff;                      /* White text */
+    border-radius: 16px;
+    padding: 32px 18px;
+    text-align: center;
+    transition: background 0.3s, color 0.3s;
+}
+.webcam-box.custom-hover strong,
+.webcam-box.custom-hover small,
+.webcam-box.custom-hover .icon {
+    color: #fff;                      /* Ensure all text/icons are white */
+    transition: color 0.3s;
+}
+.webcam-box.custom-hover a.btn-light-custom {
+    background: #111;
+    color: #fff;
+    border: none;
+    transition: background 0.3s, color 0.3s;
+    margin-top: 16px;
+}
+.webcam-box.custom-hover:hover {
+    background: #fff;                /* White background on hover */
+    color: #111;                     /* Black text on hover */
+}
+.webcam-box.custom-hover:hover strong,
+.webcam-box.custom-hover:hover small,
+.webcam-box.custom-hover:hover .icon {
+    color: #111;                     /* Text/icons turn black on hover */
+}
+.webcam-box.custom-hover:hover a.btn-light-custom {
+    background: #fff;
+    color: #000;
+}
+a{
+    text-decoration: none;
+}
+  </style>
+</head>
+<body>
+
+
+<div class="webcam-box custom-hover">
+    <div class="icon">🎥</div>
+    <strong>Webcam Detection</strong>
+    <small class="d-block mt-2">Start live object detection</small>
+    <a class="btn btn-light-custom" href="{% url 'webcam' %}">Start Camera</a>
+</div>
+
+
+
+
+</body>
+</html>

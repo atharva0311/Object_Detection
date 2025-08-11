@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ObjectDetect AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+
+		.video-container {
+		position: relative;
+		width: 100%;
+		padding-top: 56.25%; /* 16:9 Aspect Ratio */
+		overflow: hidden;
+		}
+
+		.video-container img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 70%;
+		height: 70%;
+		object-fit: cover;
+		}
+
+		.btn-custom-dark {
+		background-color: #fff;
+		color: #000;
+		border: 2px solid #000;
+		transition: all 0.3s ease;
+		align-items:start;
+		}
+
+		.btn-custom-dark:hover,
+		.btn-custom-dark:focus,
+		.btn-custom-dark:active {
+		background-color: #000;
+		color: #fff;
+		border: 2px solid #000;
+		}
+
+		.navbar {
+		box-shadow: none;
+		border-bottom: none;
+		}
+
+		.custom-bg {
+			background-color: #f0f0f0; /* Example: match this to your div background */
+		}
+
+
+		.video-container {
+			position: relative;
+			width: 100%;
+			max-width: 960px; /* Limits width */
+			max-height: 1px;
+			margin: 0 auto;    /* Centers horizontally */
+			padding: 10px;     /* Optional padding inside */
+			padding-top: 56.25%; /* 16:9 ratio */
+			overflow: hidden;
+		}
+
+		.video-container {
+		position: relative;
+		width: 100%;
+		max-width: 960px;
+		margin: 0 auto;
+		padding-top: 40%; /* ⬅️ reduced from 56.25% to 40% for shorter height */
+		overflow: hidden;
+		}
+
+  </style>
+</head>
+
+<body>
+
+	<div>
+		<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3 custom-bg" style="background-color:#fff;">
+			<div class="container">
+				<a class="navbar-brand fw-bold" href="{% url 'home' %}">👁️ ObjectDetect AI</a>
+				<div class="navbar-nav ms-auto">
+					<a class="nav-link active border-bottom border-dark ms-3" href="{% url 'home' %}"><b>Home</b></a>
+					<a class="nav-link ms-3" href="{% url 'image' %}"><b>Features</b></a>
+					<a class="nav-link ms-3" href="{% url 'webcam' %}"><b>Webcam</b></a>
+					<a class="nav-link ms-3" href="{% url 'about' %}"><b>About Us</b></a>
+					<a class="nav-link ms-3" href="{% url 'contact' %}"><b>Contact</b></a>
+				</div>
+			</div>
+		</nav>
+	</div>
+
+	<div style="background-color:#F8F8F8;">
+		<div class="container text-center">
+			<br><br>
+			<h1 class="fw-bold" style="text-align: left; font-size: 300%;">AI-Powered Object Detection</h1>
+			<p class="text-muted" style="text-align: left; font-size: 180%;">
+			Detect and identify objects in images with state-of-the-art YOLOv8 technology.<br>
+			Fast, accurate, and easy to use.
+			</p>
+		</div>
+  
+			<div class="d-flex justify-content-center gap-3 mt-4">
+			<a href="{% url 'webcam' %}" class="btn btn-custom-dark">
+			📷 Use Webcam
+			</a>
+		</div>
+		<br><br>
+	</div>
+
+	{% load static %}
+	<div id="imageCarousel" class="carousel slide mx-auto" data-bs-ride="carousel" style="max-width: 800px; background-color: #fff">
+		<br><br>
+
+		<div class="carousel-inner rounded border border-dark">
+			<div class="carousel-item active">				
+				<img src="{% static 'images1.jpeg' %}" class="d-block w-100 h-70" alt="Image 1" style="height:400px; object-fit:cover;">
+			</div>
+			<div class="carousel-item">		
+				<img src="{% static 'images.jpeg' %}" class="d-block w-100 h-70" alt="Image 2" style="height:400px; object-fit:cover;">
+			</div>
+			<div class="carousel-item">			
+				<img src="{% static 'images2.jpeg' %}" class="d-block w-100 h-70" alt="Image 3" style="height:400px; object-fit:cover;">
+			</div>
+		</div>
+
+		<!-- Controls -->
+		<button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
+			<span class="carousel-control-prev-icon"></span>
+		</button>
+		<button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
+			<span class="carousel-control-next-icon"></span>
+		</button>
+
+		<!-- Indicators -->
+		<div class="carousel-indicators">
+			<button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="0" class="active"></button>
+			<button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="1"></button>
+			<button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="2"></button>
+		</div>
+		<br><br>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Responsive Webcam Stream -->
+	<!-- <div class="video-container mt-4 border border-dark rounded">
+		<img src="{% url 'video_feed' %}" alt="Live Stream">
+	</div> -->
+
+	<!-- How It Works Section: 2x2 Card Layout -->
+	<section class="py-5 text-center" style="background-color: #F8F8F8;">
+		<div class="container">
+			<h3 class="fw-bold">How It Works</h3>
+			<p class="text-muted mb-5">
+			Our advanced AI model processes your images in real-time to detect and classify objects with high accuracy.
+			</p>
+
+			<div class="row g-4 justify-content-center">
+				<!-- Card 1 -->
+				<div class="col-12 col-md-6">
+					<div class="d-flex flex-column align-items-center p-3 border-0 shadow-none h-100">
+						<div class="bg-light p-3 rounded-circle mb-3">
+							<i class="bi bi-upload fs-3"></i>
+						</div>
+						<h6 class="fw-bold">Use Webcam</h6>
+						<p class="text-muted small mb-0">Use webcam to capture in real-time.</p>
+					</div>
+				</div>
+				
+				<!-- Card 2 -->
+				<div class="col-12 col-md-6">
+					<div class="d-flex flex-column align-items-center p-3 border-0 shadow-none h-100">
+						<div class="bg-light p-3 rounded-circle mb-3">
+							<i class="bi bi-graph-up fs-3"></i>
+						</div>
+						<h6 class="fw-bold">AI Analysis</h6>
+						<p class="text-muted small mb-0">Model analyzes image using advanced neural networks.</p>
+					</div>
+				</div>
+
+				<!-- Card 3 -->
+				<div class="col-12 col-md-6">
+					<div class="d-flex flex-column align-items-center p-3 border-0 shadow-none h-100">
+						<div class="bg-light p-3 rounded-circle mb-3">
+							<i class="bi bi-bullseye fs-3"></i>
+						</div>
+						<h6 class="fw-bold">Object Detection</h6>
+						<p class="text-muted small mb-0">Detects objects & confidence levels with precision.</p>
+					</div>
+				</div>
+
+				<!-- Card 4 -->
+				<div class="col-12 col-md-6">
+					<div class="d-flex flex-column align-items-center p-3 border-0 shadow-none h-100">
+						<div class="bg-light p-3 rounded-circle mb-3">
+							<i class="bi bi-check2-circle fs-3"></i>
+						</div>
+						<h6 class="fw-bold">Results</h6>
+						<p class="text-muted small mb-0">Outputs bounding boxes & labels with accuracy scores.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Bootstrap Icons CDN -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+
+	<!-- Model Details Section -->
+	<section class="py-5" style="background-color: #fff;">
+		<div class="container">
+			<h4 class="fw-bold mb-4">Model Details</h4>
+
+			<div class="mb-3 d-flex">
+				<i class="bi bi-box-seam fs-4 text-dark me-3"></i>
+				<div>
+					<h6 class="fw-bold mb-1">YOLOv8 Architecture</h6>
+					<p class="text-muted small mb-0">Built on the latest YOLO (You Only Look Once) architecture for superior object detection performance and accuracy.</p>
+				</div>
+			</div>
+
+			<div class="mb-5 d-flex">
+				<i class="bi bi-lightning-charge fs-4 text-dark me-3"></i>
+				<div>
+					<h6 class="fw-bold mb-1">Real-time Performance</h6>
+					<p class="text-muted small mb-0">Optimized for fast inference with real-time processing capabilities, delivering results in milliseconds.</p>
+				</div>
+			</div>
+
+			<!-- Placeholder for Model Performance Metrics -->
+			<div class="bg-secondary-subtle text-center p-5 rounded">
+				<img src="{% static 'per.png' %}" class="d-block w-100 h-100" alt="Image 1" style="height:400px; object-fit:cover; border-radius: 16px; padding: 2px;">
+			</div>
+	</section>
+
+
+
+    <footer class="bg-dark text-white mt-auto py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5 class="fw-bold">ObjectDetector</h5>
+                    <p class="text-muted small" style="-webkit-text-fill-color: #fff;">Advanced AI-powered object detection for real-time webcam feeds.</p>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <div style="padding-left: 35%;">
+                        <h6 class="text-white fs-5">Quick Links</h6>
+                        <ul class="list-unstyled text-muted fs-6">
+                            <li><a href="{% url 'home' %}" class="text-reset text-decoration-none" style="-webkit-text-fill-color: #fff;">Home</a></li>
+                            <li><a href="{% url 'image' %}" class="text-reset text-decoration-none" style="-webkit-text-fill-color: #fff;">Features</a></li>
+                            <li><a href="{% url 'webcam' %}" class="text-reset text-decoration-none" style="-webkit-text-fill-color: #fff;">Webcam</a></li>
+                            <li><a href="{% url 'about' %}" class="text-reset text-decoration-none" style="-webkit-text-fill-color: #fff;">About Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <div style="padding-left: 40%;">
+                        <h6 class="text-white fs-5">Support</h6>
+                        <ul class="list-unstyled text-muted fs-6">
+                            <li><a href="{% url 'contact' %}" class="text-reset text-decoration-none" style="-webkit-text-fill-color: #fff;">Contact</a></li>
+                            <li><a></a>>Help Center</a></li>
+                            <li><a></a>>Privacy Policy</a></li>
+                            <li><a></a>>Terms of Service</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="text-center text-muted mt-3 fs-6" style="-webkit-text-fill-color: #fff;">
+                    © 2025 ObjectDetector. All rights reserved.
+                </div>
+    </footer>
+
+
+</body>
+</html>

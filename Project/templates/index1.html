@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Object Detection from Webcam</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    video, canvas {
+      border: 2px solid #333;
+      width: 480px;
+      height: 360px;
+      margin-top: 20px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    /* Rectangle box for displaying detection results */
+    #result-box {
+      display: inline-block;
+      margin-top: 25px;
+      border: 2px solid #007bff;
+      background: #fff;
+      color: #222;
+      min-width: 300px;
+      min-height: 40px;
+      padding: 12px 18px;
+      font-size: 18px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+  </style>
+</head>
+<body>
+
+
+<h1>Object Detection from Webcam</h1>
+<video id="webcam" name='cam' autoplay playsinline></video>
+<canvas id="snapshot" width="480" height="360" style="display:none;"></canvas>
+<br>
+<button id="detectBtn">Detect Object</button>
+<button id="stopBtn" style="display:none;">Stop</button>
+<div id="result-box">Object detection result will appear here.</div>
+<img id="result-img" style="margin-top:20px; display:none; border:2px solid #007bff; border-radius:8px;"/>
+
+<script>
+const video = document.getElementById("webcam");
+const canvas = document.getElementById("snapshot");
+const ctx = canvas.getContext("2d");
+const resultBox = document.getElementById("result-box");
+const detectBtn = document.getElementById("detectBtn");
+const stopBtn = document.getElementById("stopBtn");
+const resultImg = document.getElementById("result-img");
+
+let detecting = false;
+let intervalId = null;
+
+// Start webcam
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then(stream => {video.srcObject = stream;})
+  .catch(err => {alert("Webcam not accessible: " + err);});
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+
+function sendFrame() {
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  canvas.toBlob(function(blob){
+    const formData = new FormData();
+    formData.append('frame', blob, 'frame.jpg');
+    fetch('/Detect_Object/', {
+      method: 'POST',
+      body: formData,
+      headers: {'X-CSRFToken': csrftoken}
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.image) {
+        resultImg.src = 'data:image/jpeg;base64,' + data.image;
+        resultImg.style.display = 'block';
+        resultBox.textContent = data.result || "Detection done.";
+      } else {
+        resultBox.textContent = data.result || "No detection result.";
+      }
+    })
+    .catch(error => {
+      resultBox.textContent = "Error: " + error;
+    });
+  }, 'image/jpeg', 0.95);
+}
+
+detectBtn.onclick = function() {
+  if (!detecting) {
+    detecting = true;
+    detectBtn.style.display = 'none';
+    stopBtn.style.display = 'inline-block';
+    sendFrame();
+    intervalId = setInterval(sendFrame, 200); // send every 1 second
+  }
+};
+
+stopBtn.onclick = function() {
+  detecting = false;
+  detectBtn.style.display = 'inline-block';
+  stopBtn.style.display = 'none';
+  clearInterval(intervalId);
+};
+
+</script>
+
+
+
+</body>
+</html>
